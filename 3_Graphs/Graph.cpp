@@ -42,11 +42,13 @@ Graph<T>::Graph()
 template<class T>
 void Graph<T>::bfs(T src, unordered_map<T, T>& pre, unordered_map<T, int>& d)
 {
+	//Initialize auxiliary data structures
 	//Stores the color of each node: 
 	//0 - white
 	//1 - grey
 	//2 - black
 	unordered_map<T, int> color;
+
 	pre.clear();
 	d.clear();
 	for (auto it = edges.begin(); it != edges.end(); it++) {
@@ -59,7 +61,7 @@ void Graph<T>::bfs(T src, unordered_map<T, T>& pre, unordered_map<T, int>& d)
 	d[src] = 0;
 	//Initialize source predecesor??
 
-	//Initialize priority queue with each node
+	//Initialize priority queue to iterate through each node
 	PQueue<T> q;
 	q.enqueue(src);
 	while (!q.isEmpty()) {
@@ -186,6 +188,57 @@ void Graph<T>::printPaths_unweighted(vector<vector<T>> paths)
 		}
 		cout << endl << endl;
 	}
+}
+
+/*
+* Dijkstra's Algorithm -- Iterates through a *weighted* graph
+* and finds the shortest path from the given source node to all other nodes
+*
+* @param type src: source node
+* @param u_map<type, type>& pre: map of node to predecessor node (stores previous step in shortest path)
+* @param u_map<type, int>& d: map of node to length of shortest path
+*/
+template<class T>
+void Graph<T>::dijkstra(T src, unordered_map<T, T>& pre, unordered_map<T, int>& d)
+{
+	//Initialize auxiliary data structures
+	//Stores the color of each node: 
+	//0 - white
+	//1 - grey
+	//2 - black
+	unordered_map<T, int> color;
+
+	pre.clear();
+	d.clear();
+	for (auto it = edges.begin(); it != edges.end(); it++) {
+		color.insert(make_pair(it->first, 0));
+		d.insert(make_pair(it->first, INT_MAX));
+	}
+
+	//Create priority minqueue and populate with every node, using initial weight INT_MAX
+	PQueue<T> q;
+	for (auto it = edges.begin(); it != edges.end(); it++) {
+		q.enqueue(it->first, INT_MAX);
+	}
+
+	while (!q.isEmpty()) {
+		//Get current node from queue and find all adjacent nodes
+		T nd = q.getMin();
+		list<pair<T, int>> adj = edges[nd];
+
+		for (auto it = adj.begin(); it != adj.end(); it++) {
+
+		}
+	}
+}
+
+/*
+* Changes the weight of the edge between the two given nodes
+*/
+template<class T>
+void Graph<T>::setWeight(T src, T dest, int weight, unordered_map<T, T>& pre, unordered_map<T, int>& d)
+{
+
 }
 
 /*
