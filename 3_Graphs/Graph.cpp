@@ -40,7 +40,7 @@ Graph<T>::Graph()
 * @param u_map<type, int>& d: map of node to length of shortest path
 */
 template<class T>
-void Graph<T>::bfs(T src, unordered_map<T, T>& pre, unordered_map<T, int>& d)
+void Graph<T>::bfs(T src)
 {
 	//Initialize auxiliary data structures
 	//Stores the color of each node: 
@@ -127,12 +127,9 @@ vector<T> Graph<T>::bfs_findPath(T src, T dest)
 */
 template<class T>
 vector<vector<T>> Graph<T>::bfs_findPath(T src, vector<T> dest)
-{	//Define maps for BFS function
-	unordered_map<T, T> predecessor;
-	unordered_map<T, int> distance;
-
+{	
 	//Call BFS to get paths
-	bfs(src, predecessor, distance);
+	bfs(src);
 
 	//Create vector to store shortest path
 	vector<vector<T>> paths;
@@ -144,11 +141,11 @@ vector<vector<T>> Graph<T>::bfs_findPath(T src, vector<T> dest)
 			//cout << "Shortest path: " << src;
 			p.push_back(src);
 		}
-		else if (predecessor.count(*it) == 0) {
+		else if (pre.count(*it) == 0) {
 			cout << "No path from " << src << " to " << *it << " exists.\n";
 		}
 		else {
-			p = bfs_findPath(src, predecessor[*it], predecessor, distance, p);
+			p = bfs_findPath(src, pre[*it], p);
 			p.push_back(*it);
 			//cout << ", " << *it;
 		}
@@ -199,7 +196,7 @@ void Graph<T>::printPaths_unweighted(vector<vector<T>> paths)
 * @param u_map<type, int>& d: map of node to length of shortest path
 */
 template<class T>
-void Graph<T>::dijkstra(T src, unordered_map<T, T>& pre, unordered_map<T, int>& d)
+void Graph<T>::dijkstra(T src)
 {
 	//Initialize auxiliary data structures
 	//Stores the color of each node: 
@@ -236,7 +233,7 @@ void Graph<T>::dijkstra(T src, unordered_map<T, T>& pre, unordered_map<T, int>& 
 * Changes the weight of the edge between the two given nodes
 */
 template<class T>
-void Graph<T>::setWeight(T src, T dest, int weight, unordered_map<T, T>& pre, unordered_map<T, int>& d)
+void Graph<T>::setWeight(T src, T dest, int weight)
 {
 
 }
@@ -252,7 +249,7 @@ void Graph<T>::setWeight(T src, T dest, int weight, unordered_map<T, T>& pre, un
 * @return vector<T>: shortest path
 */
 template<class T>
-vector<T> Graph<T>::bfs_findPath(T src, T dest, unordered_map<T, T>& pre, unordered_map<T, int>& d, vector<T> p)
+vector<T> Graph<T>::bfs_findPath(T src, T dest, vector<T> p)
 {
 	if (src == dest) {
 		//cout << "Shortest path: " << src;
@@ -262,7 +259,7 @@ vector<T> Graph<T>::bfs_findPath(T src, T dest, unordered_map<T, T>& pre, unorde
 		cout << "No path from " << src << " to " << dest << " exists.\n";
 	}
 	else {
-		p = bfs_findPath(src, pre[dest], pre, d, p);
+		p = bfs_findPath(src, pre[dest], p);
 		p.push_back(dest);
 		//cout << ", " << dest;
 	}
