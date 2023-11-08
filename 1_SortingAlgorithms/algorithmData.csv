@@ -1,0 +1,10 @@
+Dataset, n, Insertion sort, Quicksort, Merge sort
+pokemonRandomLarge.csv, 800, 157291, 11436, 7776
+pokemonRandomMedium.csv, 432, 46938, 4465, 3808
+pokemonRandomSmall.csv, 166, 6926, 1227, 1238
+pokemonReverseSortedLarge.csv, 800, 3669, 319600, 7776
+pokemonReverseSortedMedium.csv, 432, 1197, 93096, 3808
+pokemonReverseSortedSmall.csv, 166, 188, 13695, 1238
+pokemonSortedLarge.csv, 800, 319600, 108198, 7776
+pokemonSortedMedium.csv, 432, 93096, 36735, 3808
+pokemonSortedSmall.csv, 166, 13695, 7902, 1238
