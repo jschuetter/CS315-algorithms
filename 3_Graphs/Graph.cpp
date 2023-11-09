@@ -11,6 +11,7 @@
 *   8-Nov: changed bfs_printPath to bfs_findPath to avoid confusion; added additional helper function printPath_unweighted
 *	8-Nov: changed predecessor and distance from function parameters to class data members
 *	8-Nov: changed type of "edges" data member from unordered_map<T, list<pair<T, int>>> to unordered_map<T, unordered_map<T, int>>
+*	8-Nov: added line to set distance to src node to 8 in dijkstra algorithm (*not in pseudocode!)
 */
 
 #include <stdlib.h>
@@ -63,7 +64,7 @@ void Graph<T>::bfs(T src)
 	d[src] = 0;
 	//Initialize source predecesor??
 
-	//Initialize priority queue to iterate through each node
+	//Initialize queue to iterate through each node
 	queue<T> q;
 	q.push(src);
 	while (!q.empty()) {
@@ -98,12 +99,8 @@ void Graph<T>::bfs(T src)
 template<class T>
 vector<T> Graph<T>::bfs_findPath(T src, T dest)
 {
-	//Define maps for BFS function
-	unordered_map<T, T> predecessor;
-	unordered_map<T, int> distance;
-
 	//Call BFS to get paths
-	bfs(src, predecessor, distance);
+	bfs(src);
 
 	//Create vector to store shortest path
 	vector<T> p;
@@ -112,11 +109,11 @@ vector<T> Graph<T>::bfs_findPath(T src, T dest)
 		//cout << "Shortest path: " << src;
 		p.push_back(src);
 	}
-	else if (predecessor.count(dest) == 0) {
+	else if (pre.count(dest) == 0) {
 		cout << "No path from " << src << " to " << dest << " exists.\n";
 	}
 	else {
-		p = bfs_findPath(src, predecessor[dest], predecessor, distance);
+		p = bfs_findPath(src, pre[dest], p);
 		p.push_back(dest);
 		//cout << ", " << dest;
 	}
@@ -159,35 +156,51 @@ vector<vector<T>> Graph<T>::bfs_findPath(T src, vector<T> dest)
 }
 
 /*
-* Prints a path as returned from bfs_findPaths
-* @param vector<type> path: path vector from bfs_findPaths
+* Prints the shortest path between two given nodes, according to BFS function --
+* N.B. private function: only used in recursion for main bfs_findPath function
+* @param type src: source node key
+* @param type dest: destination node key
+* @param u_map<type, type>& pre: map of node to predecessor
+* @param u_map<type, int>& d: map of node to shortest path distance
+* @param vector<type> p: vector storing current shortest path
+* @return vector<T>: shortest path
 */
 template<class T>
-void Graph<T>::printPaths_unweighted(vector<T> path)
+vector<T> Graph<T>::bfs_findPath(T src, T dest, vector<T> p)
 {
-		cout << path->front() << " -> " << path->back() << ": \n";
-		cout << path->front();
-		for (auto j = path->begin() + 1; j != path->end(); j++) {
-			cout << ", " << *j;
-		}
-		cout << endl << endl;
+	if (src == dest) {
+		//cout << "Shortest path: " << src;
+		p.push_back(src);
+	}
+	else if (pre.count(dest) == 0) {
+		cout << "No path from " << src << " to " << dest << " exists.\n";
+	}
+	else {
+		p = bfs_findPath(src, pre[dest], p);
+		p.push_back(dest);
+		//cout << ", " << dest;
+	}
+
+	return p;
 }
 
-/*
-* Prints multiple paths as returned from bfs_findPaths
-* @param vector<vector<type>> paths: vector of path vectors from bfs_findPaths
-*/
 template<class T>
-void Graph<T>::printPaths_unweighted(vector<vector<T>> paths)
+vector<T> Graph<T>::dijkstra_findPath(T src, T dest, vector<T> p)
 {
-	for (auto i = paths.begin(); i != paths.end(); i++) {
-		cout << i->front() << " -> " << i->back() << ": \n";
-		cout << i->front();
-		for (auto j = i->begin() + 1; j != i->end(); j++) {
-			cout << ", " << *j;
-		}
-		cout << endl << endl;
+	if (src == dest) {
+		//cout << "Shortest path: " << src;
+		p.push_back(src);
 	}
+	else if (pre.count(dest) == 0) {
+		cout << "No path from " << src << " to " << dest << " exists.\n";
+	}
+	else {
+		p = dijkstra_findPath(src, pre[dest], p);
+		p.push_back(dest);
+		//cout << ", " << dest;
+	}
+
+	return p;
 }
 
 /*
@@ -221,40 +234,45 @@ void Graph<T>::dijkstra(T src)
 		q.enqueue(it->first, INT_MAX);
 	}
 
+	q.decKey(src, 0);
+
 	while (!q.isEmpty()) {
 		//Get current node from queue and find all adjacent nodes
-		T nd = q.getMin();
-		list<pair<T, int>> adj = edges[nd];
+		T nd = q.dequeue();
+		//unordered_map<T, int> adj = edges[nd];
 
-		for (auto it = adj.begin(); it != adj.end(); it++) {
+		//Iterate through adjacent nodes
+		for (auto it = edges[nd].begin(); it != edges[nd].end(); it++) {
+			T curNd = it->first;
+			int edgeWeight = (edges[nd])[curNd];//CHECK THIS SYNTAX
+			//cout << nd << "-" << curNd << ": " << edgeWeight << endl;
 
+			//EDGE_RELAX method: 
+			//If traversing through current node gives shorter path, update distance of neighbor
+			if (d[curNd] > (d[nd] + edgeWeight)) {
+				d[curNd] = d[nd] + edgeWeight;
+				pre[curNd] = nd;
+				q.decKey(curNd, d[curNd]);
+			}
 		}
 	}
 }
 
 /*
-* Changes the weight of the edge between the two given nodes
-*/
-template<class T>
-void Graph<T>::setWeight(T src, T dest, int weight)
-{
-	int edgeWeight = edges[src][dest];
-	if (d[dest] > (d[src] + edgeWeight)) {}
-}
-
-/*
-* Prints the shortest path between two given nodes, according to BFS function --
-* N.B. private function: only used in recursion for main bfs_findPath function
+* Prints the shortest path between a source and each node in the destination vector, according to Dijkstra's algorithm
 * @param type src: source node key
 * @param type dest: destination node key
-* @param u_map<type, type>& pre: map of node to predecessor
-* @param u_map<type, int>& d: map of node to shortest path distance
-* @param vector<type> p: vector storing current shortest path
-* @return vector<T>: shortest path
+* @return vector<type>: vector of nodes in shortest path
 */
 template<class T>
-vector<T> Graph<T>::bfs_findPath(T src, T dest, vector<T> p)
+vector<T> Graph<T>::dijkstra_findPath(T src, T dest)
 {
+	//Call Dijkstra's to get paths
+	dijkstra(src);
+
+	//Create vector to store shortest path and int to store weight
+	vector<T> p;
+
 	if (src == dest) {
 		//cout << "Shortest path: " << src;
 		p.push_back(src);
@@ -263,12 +281,79 @@ vector<T> Graph<T>::bfs_findPath(T src, T dest, vector<T> p)
 		cout << "No path from " << src << " to " << dest << " exists.\n";
 	}
 	else {
-		p = bfs_findPath(src, pre[dest], p);
+		p = dijkstra_findPath(src, pre[dest], p);
 		p.push_back(dest);
 		//cout << ", " << dest;
 	}
-
 	return p;
+}
+
+/*
+* Prints the shortest path between a source and each node in the destination vector, according to Dijkstra's algorithm
+* @param type src: source node key
+* @param vector<type> dest: destination node keys
+* @return vector<vector<type>>: vector of shortest paths
+*/
+template<class T>
+vector<vector<T>> Graph<T>::dijkstra_findPath(T src, vector<T> dest)
+{
+	//Call BFS to get paths
+	dijkstra(src);
+
+	//Create vector to store shortest path
+	vector<vector<T>> paths;
+
+	//Print paths for all destinations
+	for (auto it = dest.begin(); it != dest.end(); it++) {
+		vector<T> p;
+		if (src == *it) {
+			//cout << "Shortest path: " << src;
+			p.push_back(src);
+		}
+		else if (pre.count(*it) == 0) {
+			cout << "No path from " << src << " to " << *it << " exists.\n";
+		}
+		else {
+			p = dijkstra_findPath(src, pre[*it], p);
+			p.push_back(*it);
+			//cout << ", " << *it;
+		}
+		paths.push_back(p);
+	}
+
+	return paths;
+}
+
+/*
+* Prints a path as returned from bfs_findPaths
+* @param vector<type> path: path vector from bfs_findPaths
+*/
+template<class T>
+void Graph<T>::printPaths(vector<T> path)
+{
+	cout << path.front() << " -> " << path.back() << ": \n";
+	cout << path.front();
+	for (auto j = path.begin() + 1; j != path.end(); j++) {
+		cout << ", " << *j;
+	}
+	cout << endl << endl;
+}
+
+/*
+* Prints multiple paths as returned from bfs_findPaths
+* @param vector<vector<type>> paths: vector of path vectors from bfs_findPaths
+*/
+template<class T>
+void Graph<T>::printPaths(vector<vector<T>> paths)
+{
+	for (auto i = paths.begin(); i != paths.end(); i++) {
+		cout << i->front() << " -> " << i->back() << ": \n";
+		cout << i->front();
+		for (auto j = i->begin() + 1; j != i->end(); j++) {
+			cout << ", " << *j;
+		}
+		cout << endl << endl;
+	}
 }
 
 /*
@@ -408,4 +493,19 @@ int Graph<T>::findEdge(T srcKey, T destKey)
 	//Return edge weight, if found
 	if (it->first == destKey) return it->second;
 	else return -1;
+}
+
+
+/*
+* Changes the weight of the edge between the two given nodes
+*/
+template<class T>
+void Graph<T>::setWeight(T src, T dest)
+{
+	int edgeWeight = edges[src][dest];
+	cout << src << "-" << dest << ": " << edgeWeight << endl;
+	if (d[dest] > (d[src] + edgeWeight)) {
+		d[dest] = d[src] + edgeWeight;
+		pre[dest] = src;
+	}
 }

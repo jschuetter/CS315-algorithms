@@ -5,6 +5,7 @@
 * Created 3 Nov 2023
 * History:
 *	3-Nov: Switched from Node-based to array-based implementation
+*	8-Nov: Changed return condition in Minheap::find to it == vals.end() to handle null iterator runtime exception
 */
 
 #include <stdlib.h>
@@ -67,18 +68,23 @@ void Minheap<T>::fix(int rt)
 	}
 }
 
+/*
+* Returns the index of an element in the heap
+* @param type val: element to find
+* @return int: index of val
+*/
 template<class T>
 int Minheap<T>::find(T val)
 {
 	auto it = vals.begin();
-	int i = 0;
-	while (it->first != val && it != vals.end()) {
+	int i = 0; //Store index of value
+	while (it != vals.end() && it->first != val) {
 		it++;
 		i++;
 	}
 
-	if (it->first == val) return i;
-	else return -1;
+	if (it == vals.end()) return -1;
+	else return i;
 }
 
 /*

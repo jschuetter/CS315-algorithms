@@ -35,6 +35,17 @@ N PQueue<N>::dequeue()
 	return queue.getMin();
 }
 
+//Changes the key value for an element in the queue
+template<class N>
+void PQueue<N>::decKey(N val, int key)
+{
+	int index = queue.find(val); //N.B. inefficient (linear search) - is there a better way to do this?
+	
+	//Break function if index is not in queue
+	if (index == -1) return;
+	queue.decKey(index, key);
+}
+
 //Returns true if queue is empty
 template<class N>
 bool PQueue<N>::isEmpty()
@@ -48,4 +59,11 @@ template<class N>
 void PQueue<N>::clear()
 {
 	queue.clear();
+}
+
+//Prints all elements in queue
+template<class N>
+void PQueue<N>::print()
+{
+	queue.print();
 }

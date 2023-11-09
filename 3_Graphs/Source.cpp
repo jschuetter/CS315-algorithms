@@ -75,7 +75,12 @@ void testGraph() {
 
 	//Print out shortest paths
 	cout << "Shortest paths (unweighted): " << endl;
-	romania.printPaths_unweighted(paths);
+	romania.printPaths(paths);
 
+	//Test Dijkstra's algorithm
+	vector<string> pathDijkstra = romania.dijkstra_findPath("Arad", "Bucharest");
+
+	cout << "Shortest path (weighted): " << endl;
+	romania.printPaths(pathDijkstra);
 
 }

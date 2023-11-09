@@ -27,6 +27,8 @@ public:
 	void enqueue(N val, int priority = 0);
 	N dequeue();
 
+	void decKey(N val, int key);
+
 	bool isEmpty();
 	void clear();
 

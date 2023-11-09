@@ -29,13 +29,14 @@ public:
 	void bfs(T src);
 	vector<T> bfs_findPath(T src, T dest);
 	vector<vector<T>> bfs_findPath(T src, vector<T> dest);
-	void printPaths_unweighted(vector<T> path);
-	void printPaths_unweighted(vector<vector<T>> paths);
 
 	//Weighted graphs
 	void dijkstra(T src);
-	
+	vector<T> dijkstra_findPath(T src, T dest);
+	vector<vector<T>> dijkstra_findPath(T src, vector<T> dest);
 
+	void printPaths(vector<T> path);
+	void printPaths(vector<vector<T>> paths);
 
 	void build(string vertPath, string edgePath);
 	void print();
@@ -53,8 +54,9 @@ private:
 	unordered_map<T, int> d;  //Stores length of shortest path to each node according to last-run algorithm
 
 	vector<T> bfs_findPath(T src, T dest, vector<T> p); //Private version of bfs_findPath function - run in recursive calls
+	vector<T> dijkstra_findPath(T src, T dest, vector<T> p);
 
-	void setWeight(T src, T dest, int weight);  //Helper function for Dijkstra algorithm
+	void setWeight(T src, T dest);  //Helper function for Dijkstra algorithm
 };
 
 #endif
