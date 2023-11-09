@@ -28,6 +28,7 @@ public:
 	void build(vector<T> input);
 	void fix(int rt);
 	int find(T val);
+	int count(T val);
 	void ins(T val, int key);
 	//void del(T val);
 	//void del(int index);
@@ -42,6 +43,7 @@ public:
 	int l(int e);
 	int r(int e);
 	int size();
+	int weight(T val);
 
 	void print();
 	bool isEmpty();

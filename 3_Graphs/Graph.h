@@ -6,6 +6,7 @@
 * 3 Nov 2023
 * History: 
 *	3-Nov: Removed template class and specified node type as 'string'
+*	6-Nov: Restored template class
 */
 
 #include <stdlib.h>
@@ -35,6 +36,9 @@ public:
 	vector<T> dijkstra_findPath(T src, T dest);
 	vector<vector<T>> dijkstra_findPath(T src, vector<T> dest);
 
+	//Find MSTs
+	void prim(T src);
+
 	void printPaths(vector<T> path);
 	void printPaths(vector<vector<T>> paths);
 
@@ -45,6 +49,10 @@ public:
 	int delEdge(T srcKey, T destKey, bool delBoth = true);
 	int findEdge(T srcKey, T destKey);
 
+	//Getter functions
+	unordered_map<T, unordered_map<T, int>> getEdges();
+	unordered_map<T, T> getPredecessors();
+	unordered_map<T, int> getDistance();
 	//Delete node (& corresponding edges) ???
 
 private:

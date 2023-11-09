@@ -3,6 +3,10 @@
 * Description: Implements Dijkstra's algorithm, along with Graph and minheap implementation
 * Jacob Schuetter
 * Created 3 Nov 2023
+* History: 
+*	3-Nov: Implemented testHeap function to ensure functionality
+*	6-Nov: Implemented testGraph function with BFS functionality to test Graph class and current member functions
+*	8-Nov: Implemented Dijkstra functionality into testGraph function
 */
 
 #include <stdlib.h>
@@ -82,5 +86,15 @@ void testGraph() {
 
 	cout << "Shortest path (weighted): " << endl;
 	romania.printPaths(pathDijkstra);
+
+	//Test Prim's Algorithm
+	romania.prim("Arad");
+	unordered_map<string, string> pred = romania.getPredecessors();
+	cout << "Prim's Minimum Spanning Tree\n";
+	cout << "Source node: Arad\n";
+	cout << setw(15) << "Vertex: " << " | Predecesor: \n";
+	for (auto it = pred.begin(); it != pred.end(); it++) {
+		cout << setw(15) << it->first << " | " << it->second << endl;
+	}
 
 }

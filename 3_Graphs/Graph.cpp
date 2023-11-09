@@ -11,7 +11,8 @@
 *   8-Nov: changed bfs_printPath to bfs_findPath to avoid confusion; added additional helper function printPath_unweighted
 *	8-Nov: changed predecessor and distance from function parameters to class data members
 *	8-Nov: changed type of "edges" data member from unordered_map<T, list<pair<T, int>>> to unordered_map<T, unordered_map<T, int>>
-*	8-Nov: added line to set distance to src node to 8 in dijkstra algorithm (*not in pseudocode!)
+*	8-Nov: added line to set distance to src node to 0 in dijkstra algorithm (*not in pseudocode!)
+*	9-Nov: added getter functions for all data members
 */
 
 #include <stdlib.h>
@@ -244,7 +245,7 @@ void Graph<T>::dijkstra(T src)
 		//Iterate through adjacent nodes
 		for (auto it = edges[nd].begin(); it != edges[nd].end(); it++) {
 			T curNd = it->first;
-			int edgeWeight = (edges[nd])[curNd];//CHECK THIS SYNTAX
+			int edgeWeight = (edges[nd])[curNd];
 			//cout << nd << "-" << curNd << ": " << edgeWeight << endl;
 
 			//EDGE_RELAX method: 
@@ -322,6 +323,51 @@ vector<vector<T>> Graph<T>::dijkstra_findPath(T src, vector<T> dest)
 	}
 
 	return paths;
+}
+
+
+/* 
+* Finds a minimum spanning tree (MST) using Prim's algorithm
+* @param type src: source node for MST
+*/
+template<class T>
+void Graph<T>::prim(T src)
+{
+
+	////Initialize auxiliary data structures
+	////Stores the color of each node: 
+	////0 - white
+	////1 - grey
+	////2 - black
+	////unordered_map<T, int> color;
+
+	//pre.clear();
+	////d.clear();
+	//for (auto it = edges.begin(); it != edges.end(); it++) {
+	//	//color.insert(make_pair(it->first, 0));
+	//	//d.insert(make_pair(it->first, INT_MAX));
+	//}
+
+	pre.clear();
+	//Create priority minqueue and populate with every node, using initial weight INT_MAX
+	PQueue<T> q;
+	for (auto it = edges.begin(); it != edges.end(); it++) {
+		q.enqueue(it->first, INT_MAX);
+	}
+
+	q.decKey(src, 0);
+
+	while (!q.isEmpty()) {
+		T nd = q.dequeue();
+		for (auto it = edges[nd].begin(); it != edges[nd].end(); it++) {
+			T curNd = it->first;
+			int edgeWeight = (edges[nd])[curNd];
+			if (q.count(curNd) && edgeWeight < q.getPriority(curNd)) {
+				pre[curNd] = nd;
+				q.decKey(curNd, edgeWeight);
+			}
+		}
+	}
 }
 
 /*
@@ -407,7 +453,8 @@ while (!edgeIn.eof()) {
 template <class T>
 void Graph<T>::print()
 {
-	printf("%*s | %s", 15, "Vertices: ", "Adjacent vertices (weight): ");
+	//printf("%*s | %s", 15, "Vertices: ", "Adjacent vertices (weight): ");
+	cout << setw(15) << "Vertices: " << " | Adjacent vertices (weight): \n";
 	cout << endl;
 	for (auto it = edges.begin(); it != edges.end(); it++) {
 		//printf("%*s | ", 15, it->first);
@@ -493,6 +540,27 @@ int Graph<T>::findEdge(T srcKey, T destKey)
 	//Return edge weight, if found
 	if (it->first == destKey) return it->second;
 	else return -1;
+}
+
+//Getter function for data member 'edges'
+template<class T>
+unordered_map<T, unordered_map<T, int>> Graph<T>::getEdges()
+{
+	return edges;
+}
+
+//Getter function for data member 'pre'
+template<class T>
+unordered_map<T, T> Graph<T>::getPredecessors()
+{
+	return pre;
+}
+
+//Getter function for data member 'd'
+template<class T>
+unordered_map<T, int> Graph<T>::getDistance()
+{	
+	return d;
 }
 
 

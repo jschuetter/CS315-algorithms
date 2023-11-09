@@ -2,6 +2,8 @@
 * Implementation for Priority Queue class - minimum priority
 * Jacob Schuetter
 * Created 6 Nov 2023
+* History:
+*	9-Nov: added member functions 'count' and 'getPriority'
 */
 
 #include <stdlib.h>
@@ -44,6 +46,30 @@ void PQueue<N>::decKey(N val, int key)
 	//Break function if index is not in queue
 	if (index == -1) return;
 	queue.decKey(index, key);
+}
+
+/*
+* Returns the number of elements matching the given key
+* @param type val: key to find
+* @return int: number of element matching val (0 if not in queue)
+*/
+template<class N>
+int PQueue<N>::count(N val)
+{
+	int cnt = queue.count(val);
+	return cnt;
+}
+
+/*
+* Returns the priority of a given element in the queue
+* @param type val: key to find
+* @return int: priority of val in queue (-1 if not found)
+*/
+template<class N>
+int PQueue<N>::getPriority(N val)
+{
+	int p = queue.weight(val);
+	return p;
 }
 
 //Returns true if queue is empty

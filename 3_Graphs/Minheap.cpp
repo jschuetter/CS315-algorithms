@@ -6,6 +6,7 @@
 * History:
 *	3-Nov: Switched from Node-based to array-based implementation
 *	8-Nov: Changed return condition in Minheap::find to it == vals.end() to handle null iterator runtime exception
+*	9-Nov: Added member functions 'weight' and 'count'
 */
 
 #include <stdlib.h>
@@ -85,6 +86,21 @@ int Minheap<T>::find(T val)
 
 	if (it == vals.end()) return -1;
 	else return i;
+}
+
+/*
+* Returns the number of elements matching the given key
+* @param type val: key to find
+* @return int: number of element matching val (0 if not in queue)
+*/
+template<class T>
+int Minheap<T>::count(T val)
+{
+	int cnt = 0;
+	for (auto it = vals.begin(); it != vals.end(); it++) {
+		if (it->first == val) cnt++;
+	}
+	return cnt;
 }
 
 /*
@@ -189,6 +205,20 @@ template<class T>
 int Minheap<T>::size()
 {
 	return vals.size();
+}
+
+/*
+* Gets the weight of a given term in the heap.
+* @param type val: element to find
+* @return int: weight of val; -1 if not found
+*/
+template<class T>
+int Minheap<T>::weight(T val)
+{
+	int index = find(val);
+	if (index == -1) return -1;
+	int wt = vals[index].second;
+	return wt;
 }
 
 template<class T>

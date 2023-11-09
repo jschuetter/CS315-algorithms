@@ -29,6 +29,9 @@ public:
 
 	void decKey(N val, int key);
 
+	int count(N val);
+	int getPriority(N val);
+
 	bool isEmpty();
 	void clear();
 
