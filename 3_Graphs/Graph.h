@@ -10,7 +10,7 @@
 
 #include <stdlib.h>
 #include <unordered_map>
-#include <list>
+//#include <list>
 #include <utility>
 using namespace std;
 
@@ -47,7 +47,7 @@ public:
 	//Delete node (& corresponding edges) ???
 
 private:
-	unordered_map<T, list<pair<T, int>>> edges; //Map of vertices to list of edges (listed as pair of destination, weight)
+	unordered_map<T, unordered_map<T, int>> edges; //Map of vertices to list of edges (listed as pair of destination, weight)
 
 	unordered_map<T, T> pre;  //Stores predecessor node of each node according to last-run algorithm
 	unordered_map<T, int> d;  //Stores length of shortest path to each node according to last-run algorithm

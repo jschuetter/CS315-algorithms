@@ -9,11 +9,13 @@
 *	8-Nov: added multiple overflow functions for bfs_printPath for ease of testing and general use
 *	8-Nov: changed return type of bfs_printPath functions from void to vector<T> (or vector<vector<T>>) to aid with print formatting
 *   8-Nov: changed bfs_printPath to bfs_findPath to avoid confusion; added additional helper function printPath_unweighted
+*	8-Nov: changed predecessor and distance from function parameters to class data members
+*	8-Nov: changed type of "edges" data member from unordered_map<T, list<pair<T, int>>> to unordered_map<T, unordered_map<T, int>>
 */
 
 #include <stdlib.h>
 #include <string>
-#include <list>
+#include <queue>
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -62,22 +64,23 @@ void Graph<T>::bfs(T src)
 	//Initialize source predecesor??
 
 	//Initialize priority queue to iterate through each node
-	PQueue<T> q;
-	q.enqueue(src);
-	while (!q.isEmpty()) {
+	queue<T> q;
+	q.push(src);
+	while (!q.empty()) {
 		//Select next node in queue and get list of adjacent edges
-		T nd = q.dequeue();
-		list<pair<T, int>> adj = edges[nd];
+		T nd = q.front();
+		q.pop();
+		//unordered_map<T, int> adj = edges[nd];
 
 		//Iterate over all adjacent nodes
-		for (auto it = adj.begin(); it != adj.end(); it++) {
+		for (auto it = edges[nd].begin(); it != edges[nd].end(); it++) {
 			//If node is undiscovered, set color to grey and update distance/predecessor
 			T cur = it->first;
 			if (color[cur] == 0) {
 				color[cur] = 1;
 				d[cur] = d[nd] + 1;
 				pre[cur] = nd;
-				q.enqueue(cur);
+				q.push(cur);
 			}
 		}
 		//Set node color to black - now fully examined
@@ -235,7 +238,8 @@ void Graph<T>::dijkstra(T src)
 template<class T>
 void Graph<T>::setWeight(T src, T dest, int weight)
 {
-
+	int edgeWeight = edges[src][dest];
+	if (d[dest] > (d[src] + edgeWeight)) {}
 }
 
 /*
@@ -323,7 +327,7 @@ void Graph<T>::print()
 	for (auto it = edges.begin(); it != edges.end(); it++) {
 		//printf("%*s | ", 15, it->first);
 		cout << setw(15) << it->first << " | ";
-		list<pair<string, int>> edgeLi = it->second;
+		unordered_map<string, int> edgeLi = it->second;
 		for (auto li = it->second.begin(); li != it->second.end(); li++) {
 			string dest = li->first;
 			int wt = li->second;
@@ -343,10 +347,10 @@ void Graph<T>::print()
 template <class T>
 void Graph<T>::insEdge(T srcKey, T destKey, int wt)
 {
-	list<pair<T, int>> newEdges = edges[srcKey];
+	//list<pair<T, int>> newEdges = edges[srcKey];
 
-	newEdges.push_back(make_pair(destKey, wt));
-	edges[srcKey] = newEdges;
+	edges[srcKey].insert(make_pair(destKey, wt));
+	//edges[srcKey] = newEdges;
 }
 /*
 * Inserts a new node into the graph

@@ -29,6 +29,8 @@ public:
 
 	bool isEmpty();
 	void clear();
+
+	void print();
 private:
 	Minheap<N> queue;
 };

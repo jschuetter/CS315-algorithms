@@ -26,7 +26,7 @@ void testGraph();
 
 int main() {
 
-	testHeap(10);
+	//testHeap(10);
 
 	testGraph();
 
@@ -60,7 +60,7 @@ void testHeap(int size) {
 void testGraph() {
 	Graph<string> romania;
 	romania.build(NODES_PATH, EDGES_PATH);
-	cout << "Initial construction";
+	//cout << "Initial construction\n";
 	romania.print();
 	cout << endl;
 
