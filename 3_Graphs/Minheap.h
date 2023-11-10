@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <vector>
 #include <utility>
-//#include "Node.h"
 using namespace std;
 
 #ifndef MINHEAP_H
@@ -30,11 +29,9 @@ public:
 	int find(T val);
 	int count(T val);
 	void ins(T val, int key);
-	//void del(T val);
-	//void del(int index);
-	//void del(Node<T>* nd);
+	//Delete node function?
 	void decKey(int index, int key);
-	//bool incKey(T value, int key);
+	//IncreaseKey function?
 	T getMin();
 	void clear();
 
@@ -48,16 +45,9 @@ public:
 	void print();
 	bool isEmpty();
 
-	//Node<T>* r(); //Returns ptr to root
-	//Node<T>* end(); //Returns ptr to last
-
 private:
 	vector<pair<T, int>> vals;
-	//int s;
 	void Swap(int i1, int i2);
-	//Node<T>* root; //Pointer to root of tree
-	//Node<T>* last; //Pointer to last inserted node of tree
-	//Node<T> next; //Node object holding next open spot
 };
 
 #endif

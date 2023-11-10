@@ -14,7 +14,7 @@
 #include <utility>
 #include <iostream>
 #include "Minheap.h"
-//#include "Node.h"
+
 using namespace std;
 
 //Constructors
@@ -129,21 +129,8 @@ void Minheap<T>::decKey(int index, int key)
 	}
 }
 
-///*
-//* Increases the value of some member of the heap
-//* @param oldKey: old key to change
-//* @param newKey: new value of element
-//* @return bool: returns false if element cannot be found
-//*/
-//template<class T>
-//bool Minheap<T>::incKey(T value, int key)
-//{
-//	int i = find(value);
-//	if (i == -1) return false;
-//	incKey(i, key);
-//	return true;
-//}
 
+//Returns and removes minimum value element from heap
 template<class T>
 T Minheap<T>::getMin()
 {
@@ -221,6 +208,7 @@ int Minheap<T>::weight(T val)
 	return wt;
 }
 
+//Prints all elements in heap (\n-delimited) with weights in parentheses
 template<class T>
 void Minheap<T>::print()
 {

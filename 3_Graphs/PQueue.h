@@ -21,7 +21,6 @@ class PQueue {
 public:
 	//Constructors
 	PQueue();
-	//PQueue(vector<pair<N, int>> input);
 
 	//Member functions
 	void enqueue(N val, int priority = 0);

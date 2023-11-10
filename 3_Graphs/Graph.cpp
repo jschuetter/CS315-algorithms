@@ -72,7 +72,6 @@ void Graph<T>::bfs(T src)
 		//Select next node in queue and get list of adjacent edges
 		T nd = q.front();
 		q.pop();
-		//unordered_map<T, int> adj = edges[nd];
 
 		//Iterate over all adjacent nodes
 		for (auto it = edges[nd].begin(); it != edges[nd].end(); it++) {
@@ -161,8 +160,6 @@ vector<vector<T>> Graph<T>::bfs_findPath(T src, vector<T> dest)
 * N.B. private function: only used in recursion for main bfs_findPath function
 * @param type src: source node key
 * @param type dest: destination node key
-* @param u_map<type, type>& pre: map of node to predecessor
-* @param u_map<type, int>& d: map of node to shortest path distance
 * @param vector<type> p: vector storing current shortest path
 * @return vector<T>: shortest path
 */
@@ -185,6 +182,14 @@ vector<T> Graph<T>::bfs_findPath(T src, T dest, vector<T> p)
 	return p;
 }
 
+/*
+* Prints the shortest path between two given nodes, according to Dijkstra function --
+* N.B. private function: only used in recursion for main dijkstra_findPath function
+* @param type src: source node key
+* @param type dest: destination node key
+* @param vector<type> p: vector storing current shortest path
+* @return vector<T>: shortest path
+*/
 template<class T>
 vector<T> Graph<T>::dijkstra_findPath(T src, T dest, vector<T> p)
 {
@@ -333,21 +338,6 @@ vector<vector<T>> Graph<T>::dijkstra_findPath(T src, vector<T> dest)
 template<class T>
 void Graph<T>::prim(T src)
 {
-
-	////Initialize auxiliary data structures
-	////Stores the color of each node: 
-	////0 - white
-	////1 - grey
-	////2 - black
-	////unordered_map<T, int> color;
-
-	//pre.clear();
-	////d.clear();
-	//for (auto it = edges.begin(); it != edges.end(); it++) {
-	//	//color.insert(make_pair(it->first, 0));
-	//	//d.insert(make_pair(it->first, INT_MAX));
-	//}
-
 	pre.clear();
 	//Create priority minqueue and populate with every node, using initial weight INT_MAX
 	PQueue<T> q;
@@ -362,7 +352,8 @@ void Graph<T>::prim(T src)
 		for (auto it = edges[nd].begin(); it != edges[nd].end(); it++) {
 			T curNd = it->first;
 			int edgeWeight = (edges[nd])[curNd];
-			if (q.count(curNd) && edgeWeight < q.getPriority(curNd)) {
+			//Set new precursor if weight is less than edge from previous precursor
+			if (q.count(curNd) && edgeWeight < q.getPriority(curNd)) { //Change getPriority function?
 				pre[curNd] = nd;
 				q.decKey(curNd, edgeWeight);
 			}
@@ -438,9 +429,6 @@ while (!edgeIn.eof()) {
 	getline(edgeIn, src, ',');
 	getline(edgeIn, dest, ',');
 	getline(edgeIn, weight, '\n');
-	/*edgeIn.getline(src, maxIn, ',');
-	edgeIn.getline(dest, maxIn, ',');
-	edgeIn.getline(weight, maxIn, '\n');*/
 	w = stoi(weight);
 
 	insEdge(src, dest, w);
@@ -453,17 +441,14 @@ while (!edgeIn.eof()) {
 template <class T>
 void Graph<T>::print()
 {
-	//printf("%*s | %s", 15, "Vertices: ", "Adjacent vertices (weight): ");
 	cout << setw(15) << "Vertices: " << " | Adjacent vertices (weight): \n";
 	cout << endl;
 	for (auto it = edges.begin(); it != edges.end(); it++) {
-		//printf("%*s | ", 15, it->first);
 		cout << setw(15) << it->first << " | ";
 		unordered_map<string, int> edgeLi = it->second;
 		for (auto li = it->second.begin(); li != it->second.end(); li++) {
 			string dest = li->first;
 			int wt = li->second;
-			//printf("%s (%i), ", dest, wt);
 			cout << li->first << " (" << li->second << "), ";
 		}
 		cout << endl;
@@ -479,11 +464,9 @@ void Graph<T>::print()
 template <class T>
 void Graph<T>::insEdge(T srcKey, T destKey, int wt)
 {
-	//list<pair<T, int>> newEdges = edges[srcKey];
-
 	edges[srcKey].insert(make_pair(destKey, wt));
-	//edges[srcKey] = newEdges;
 }
+
 /*
 * Inserts a new node into the graph
 * @param type key: value of new node to insert
@@ -493,6 +476,7 @@ void Graph<T>::insNode(T key)
 {
 	edges[key];
 }
+
 /*
 * Finds and deletes an edge in the graph
 * @param type srcKey: key of edge source
@@ -518,7 +502,6 @@ int Graph<T>::delEdge(T srcKey, T destKey, bool delBoth)
 	else edge1 = 1;
 
 	//Delete corresponding (reverse) edge if called for
-	//N.B. function only returns false if 
 	if (delBoth) edge2 = delEdge(destKey, srcKey, false);
 
 	return edge1 + edge2;
@@ -564,9 +547,8 @@ unordered_map<T, int> Graph<T>::getDistance()
 }
 
 
-/*
-* Changes the weight of the edge between the two given nodes
-*/
+
+//Changes the weight of the edge between the two given nodes
 template<class T>
 void Graph<T>::setWeight(T src, T dest)
 {

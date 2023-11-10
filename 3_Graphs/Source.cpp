@@ -34,10 +34,6 @@ int main() {
 
 	testGraph();
 
-	/*Graph<string> romania;
-	romania.build(NODES_PATH, EDGES_PATH);
-	romania.print();*/
-
 	return 0;
 }
 
@@ -69,10 +65,6 @@ void testGraph() {
 	cout << endl;
 
 	//Determine which edges to test
-	/*vector<pair<string, string>> testEdges;
-	testEdges.push_back(make_pair("Arad", "Sibiu"));
-	testEdges.push_back(make_pair("Arad", "Craiova"));
-	testEdges.push_back(make_pair("Arad", "Bucharest"));*/
 	vector<string> destinations = { "Sibiu", "Craiova", "Bucharest" };
 
 	vector<vector<string>> paths = romania.bfs_findPath("Arad", destinations);

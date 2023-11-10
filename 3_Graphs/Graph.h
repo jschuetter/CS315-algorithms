@@ -7,11 +7,11 @@
 * History: 
 *	3-Nov: Removed template class and specified node type as 'string'
 *	6-Nov: Restored template class
+*	* Decided not to implement inQueue member for each node - too complex with array implemented tree
 */
 
 #include <stdlib.h>
 #include <unordered_map>
-//#include <list>
 #include <utility>
 using namespace std;
 
@@ -39,6 +39,7 @@ public:
 	//Find MSTs
 	void prim(T src);
 
+	//Misc. member functions
 	void printPaths(vector<T> path);
 	void printPaths(vector<vector<T>> paths);
 
@@ -53,7 +54,7 @@ public:
 	unordered_map<T, unordered_map<T, int>> getEdges();
 	unordered_map<T, T> getPredecessors();
 	unordered_map<T, int> getDistance();
-	//Delete node (& corresponding edges) ???
+	//Delete node (& corresponding edges)?
 
 private:
 	unordered_map<T, unordered_map<T, int>> edges; //Map of vertices to list of edges (listed as pair of destination, weight)
