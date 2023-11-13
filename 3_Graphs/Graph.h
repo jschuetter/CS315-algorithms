@@ -18,7 +18,6 @@ using namespace std;
 #ifndef GRAPH_H
 #define GRAPH_H
 
-//MODIFY FOR TEMPLATE CLASS!
 template <class T = string>
 class Graph {
 public:

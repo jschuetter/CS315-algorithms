@@ -12,6 +12,7 @@
 *	8-Nov: changed predecessor and distance from function parameters to class data members
 *	8-Nov: changed type of "edges" data member from unordered_map<T, list<pair<T, int>>> to unordered_map<T, unordered_map<T, int>>
 *	8-Nov: added line to set distance to src node to 0 in dijkstra algorithm (*not in pseudocode!)
+*	9-Nov: changed printPath_unweighted to printPath_weighted
 *	9-Nov: added getter functions for all data members
 */
 
